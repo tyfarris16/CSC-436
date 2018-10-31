@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Lab1</string>
+    <string name="action_settings">Settings</string>
+    <string name="ty_farris">Ty Farris</string>
+    <string name="visible">Visible</string>
+    <string name="some_text">Some Text</string>
+    <string name="toast">TOAST</string>
+    <string name="long_click">Long Click</string>
+</resources>
