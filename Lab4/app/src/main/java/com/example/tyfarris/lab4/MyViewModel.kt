@@ -1,0 +1,93 @@
+package com.example.tyfarris.lab4
+
+import com.google.firebase.database.FirebaseDatabase
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
+import java.util.ArrayList
+import java.util.HashMap
+
+class MyViewModel : ViewModel() {
+    //    val arrDay = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+//    val arrMonth = listOf("Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct")
+//    val arrYear = listOf(2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010)
+//    val arrTime = listOf("8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm")
+
+    var position = ""
+    val database = FirebaseDatabase.getInstance()
+    val scheduleRef = database.getReference("Schedule")
+    /**
+     * An array of sample (dummy) items.
+     */
+    var viewModelItems: MutableLiveData<MutableList<scheduledEvent>> = MutableLiveData()
+
+
+    /**
+     * An array of sample (dummy) items.
+     */
+    var ITEMS: MutableList<scheduledEvent> = ArrayList()
+
+    /**
+     * A map of sample (dummy) items, by ID.
+     */
+    var ITEM_MAP: MutableMap<String, scheduledEvent> = HashMap()
+
+    //private val COUNT = 20
+
+    init {
+
+        // Add some sample items.
+//        for (i in 1..COUNT)
+        //addItem(createScheduledEvent("Event", "Date", "Time", "Location"))
+    }
+
+    fun deleteItem(item: scheduledEvent){
+        ITEMS.remove(item)
+        ITEM_MAP.remove(item.sEvent)
+        scheduleRef.child(item.sEvent).removeValue()
+        viewModelItems.setValue(ITEMS)
+
+    }
+
+    fun addItem(item: scheduledEvent) {
+        ITEMS.add(item)
+        ITEM_MAP.put(item.sEvent, item)
+        scheduleRef.child(item.sEvent).setValue(item)
+        viewModelItems.setValue(ITEMS)
+
+    }
+
+    fun createScheduledEvent(tempEvent: String,
+                             tempDate: String,
+                             tempTime: String,
+                             tempLocation: String): scheduledEvent {
+//        return scheduledEvent(arrDay.get(position).toString(),
+//                arrMonth.get(position),
+//                arrYear.get(position).toString(),
+//                arrTime.get(position))
+
+        return scheduledEvent(tempEvent,
+                tempDate,
+                tempTime,
+                tempLocation)
+    }
+
+//    private fun makeDetails(position: Int): String {
+//        val builder = StringBuilder()
+//        builder.append("Details about Item: ").append(position)
+//        for (i in 0..position - 1) {
+//            builder.append("\nMore details information here.")
+//        }
+//        return builder.toString()
+//    }
+
+    /**
+     * A dummy item representing a piece of content.
+     * originally : id, content, details, time
+     */
+    data class scheduledEvent(var sEvent: String, var sDate: String, var sTime: String, var sLocation: String) {
+
+        constructor(): this("", "", "", "")
+//        override fun toString(): String = sEvent
+
+    }
+}
