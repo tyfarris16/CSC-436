@@ -1,5 +1,6 @@
 package com.example.tyfarris.lab4
 
+import android.arch.lifecycle.LifecycleObserver
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -11,12 +12,20 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 
-import com.example.tyfarris.lab4.dummy.TFarDatastore
 import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.detail_layout.*
 import kotlinx.android.synthetic.main.detail_layout.view.*
 import kotlinx.android.synthetic.main.item_list_content.view.*
 import kotlinx.android.synthetic.main.item_list.*
+
+import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.Observer
+import android.util.EventLog
+import android.util.Log
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 /**
  * An activity representing a list of Pings. This activity
@@ -36,6 +45,41 @@ class ItemListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val database = FirebaseDatabase.getInstance()
+        database.setPersistenceEnabled(true)
+
+        val model = ViewModelProviders.of(this).get(MyViewModel::class.java)
+
+        model.scheduleRef.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                //println("Snapshot type is:" + dataSnapshot.javaClass.name)
+
+                model.viewModelItems.value?.clear()
+
+                dataSnapshot.children.forEach {
+                    val event = it.getValue(MyViewModel.scheduledEvent::class.java)
+                    //model.viewModelItems.value?.add(event!!)
+                    model.addItem(event!!)
+                }
+
+            }
+            override fun onCancelled(error: DatabaseError) {
+                // Failed to read value
+            }
+        })
+
+
+        model.viewModelItems.observe(this, Observer<MutableList<MyViewModel.scheduledEvent>>{
+            item_list.adapter.notifyDataSetChanged()
+            // update UI
+            Log.d("MADEIT", "Observer has been called")
+        })
+
+
         setContentView(R.layout.activity_item_list)
 
         setSupportActionBar(toolbar)
@@ -69,12 +113,13 @@ class ItemListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = SimpleItemRecyclerViewAdapter(this, TFarDatastore.ITEMS, twoPane)
+        val model = ViewModelProviders.of(this).get(MyViewModel::class.java)
+        recyclerView.adapter = SimpleItemRecyclerViewAdapter(this, model.ITEMS, twoPane)
         recyclerView.adapter.notifyDataSetChanged()
     }
 
     class SimpleItemRecyclerViewAdapter(private val parentActivity: ItemListActivity,
-                                        private val values: List<TFarDatastore.scheduledEvent>,
+                                        private val values: List<MyViewModel.scheduledEvent>,
                                         private val twoPane: Boolean) :
             RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
 
@@ -82,7 +127,7 @@ class ItemListActivity : AppCompatActivity() {
 
         init {
             onClickListener = View.OnClickListener { v ->
-                val item = v.tag as TFarDatastore.scheduledEvent
+                val item = v.tag as MyViewModel.scheduledEvent
                 if (twoPane) {
                     val fragment = ItemDetailFragment().apply {
                         arguments = Bundle().apply {
@@ -97,6 +142,9 @@ class ItemListActivity : AppCompatActivity() {
                     val intent = Intent(v.context, ItemDetailActivity::class.java).apply {
                         putExtra(ItemDetailFragment.ARG_ITEM_ID, item.sEvent)
                     }
+                    val model = ViewModelProviders.of(parentActivity).get(MyViewModel::class.java)
+                    model.position = item.sEvent
+
                     v.context.startActivity(intent)
                 }
                 notifyDataSetChanged()

@@ -1,15 +1,16 @@
 package com.example.tyfarris.lab4
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.tyfarris.lab4.dummy.TFarDatastore
 import kotlinx.android.synthetic.main.activity_item_detail.*
 import kotlinx.android.synthetic.main.add_event.*
 import kotlinx.android.synthetic.main.add_event.view.*
@@ -27,14 +28,17 @@ class AddDialogFragment : Fragment() {
     /**
      * The dummy content this fragment is presenting.
      */
-    var enteredEvent = "";
-    var enteredDate = "";
-    var enteredTime = "";
-    var enteredLocation = "";
+    var enteredEvent = ""
+    var enteredDate = ""
+    var enteredTime = ""
+    var enteredLocation = ""
+    var model : MyViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.add_event, container, false)
+
+        model = ViewModelProviders.of(activity!!).get(MyViewModel::class.java)
 
         rootView.cancelButton.setOnClickListener {
             activity?.finish()
@@ -101,7 +105,7 @@ class AddDialogFragment : Fragment() {
         })
 
         rootView.addButton.setOnClickListener {
-            TFarDatastore.addItem(TFarDatastore.createScheduledEvent(enteredEvent,
+            model?.addItem(model!!.createScheduledEvent(enteredEvent,
                     enteredDate, enteredTime, enteredLocation))
 
             activity?.finish()

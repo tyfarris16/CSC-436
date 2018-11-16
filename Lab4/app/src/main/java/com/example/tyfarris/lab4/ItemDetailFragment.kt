@@ -1,5 +1,7 @@
 package com.example.tyfarris.lab4
 
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.tyfarris.lab4.dummy.TFarDatastore
 import kotlinx.android.synthetic.main.activity_item_detail.*
 import kotlinx.android.synthetic.main.add_event.*
 import kotlinx.android.synthetic.main.add_event.view.*
@@ -35,25 +36,32 @@ class ItemDetailFragment : Fragment() {
 //        fun onDataPass(data: String)
 //    }
 
-    private var item: TFarDatastore.scheduledEvent? = null
+    private var item: MyViewModel.scheduledEvent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
+            val model = ViewModelProviders.of(this).get(MyViewModel::class.java)
             if (it.containsKey(ARG_ITEM_ID)) {
                 // Load the dummy content specified by the fragment
                 // arguments. In a real-world scenario, use a Loader
                 // to load content from a content provider.
-                item = TFarDatastore.ITEM_MAP[it.getString(ARG_ITEM_ID)]
+                item = model.ITEM_MAP[it.getString(ARG_ITEM_ID)]
                 activity?.toolbar_layout?.title = item?.sEvent
             }
         }
+
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.detail_layout, container, false)
+
+        val model = ViewModelProviders.of(this).get(MyViewModel::class.java)
+        if (model.ITEM_MAP.containsKey(model.position))
+            item = model.ITEM_MAP[model.position]
 
         var changedEvent = item?.sEvent
         var changedDate = item?.sDate
@@ -136,21 +144,21 @@ class ItemDetailFragment : Fragment() {
 
         rootView.saveButton.setOnClickListener {
             //Toast.makeText(activity, "Please long press the key", Toast.LENGTH_SHORT ).show();
-            TFarDatastore.ITEMS.remove(item)
-            TFarDatastore.ITEM_MAP.remove(item?.sEvent)
+            val model = ViewModelProviders.of(this).get(MyViewModel::class.java)
+            model.deleteItem(item!!)
 
             //val index = TFarDatastore.ITEMS.indexOf(item)
-            var modifiedEvent = TFarDatastore.createScheduledEvent(changedEvent.toString(),
+            var modifiedEvent = model.createScheduledEvent(changedEvent.toString(),
                     changedDate.toString(),
                     changedTime.toString(),
                     changedLocation.toString())
-            TFarDatastore.addItem(modifiedEvent)
+            model.addItem(modifiedEvent)
             activity?.finish()
         }
 
         rootView.deleteButton.setOnClickListener{
-            TFarDatastore.ITEMS.remove(item)
-            TFarDatastore.ITEM_MAP.remove(item?.sEvent)
+            val model = ViewModelProviders.of(this).get(MyViewModel::class.java)
+            model.deleteItem(item!!)
             activity?.finish()
         }
 

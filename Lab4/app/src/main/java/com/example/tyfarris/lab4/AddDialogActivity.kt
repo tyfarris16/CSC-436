@@ -9,7 +9,6 @@ import android.text.TextWatcher
 import android.text.Editable
 import android.view.View
 import android.widget.Toast
-import com.example.tyfarris.lab4.dummy.TFarDatastore
 import kotlinx.android.synthetic.main.activity_item_detail.*
 import kotlinx.android.synthetic.main.add_event.*
 
