@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/addEvent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="102dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="96dp"
+        android:layout_marginBottom="68dp"
+        android:ems="10"
+        android:hint="Event"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/addDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/addDate"
+        android:layout_width="213dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="102dp"
+        android:layout_marginEnd="96dp"
+        android:layout_marginBottom="73dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Date"
+        app:layout_constraintBottom_toTopOf="@+id/addTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addEvent" />
+
+    <EditText
+        android:id="@+id/addTime"
+        android:layout_width="213dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="102dp"
+        android:layout_marginEnd="96dp"
+        android:layout_marginBottom="75dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Time"
+        app:layout_constraintBottom_toTopOf="@+id/addLocation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addDate" />
+
+    <EditText
+        android:id="@+id/addLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="102dp"
+        android:layout_marginEnd="96dp"
+        android:layout_marginBottom="147dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Location"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addTime" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginBottom="31dp"
+        android:text="Cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/addButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addLocation" />
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="169dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="31dp"
+        android:text="Add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cancelButton"
+        app:layout_constraintTop_toBottomOf="@+id/addLocation" />
+
+</android.support.constraint.ConstraintLayout>
