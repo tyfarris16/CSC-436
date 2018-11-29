@@ -1,5 +1,6 @@
 package com.example.tyfarris.reminderapp
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.support.v4.app.Fragment
@@ -13,11 +14,16 @@ import java.util.*
 class ProfileFragment : Fragment(){
 
     var tts:TextToSpeech? = null
+    private lateinit var model: MyModelView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         val progressLevel = view.findViewById<ProgressBar>(R.id.progressBar)
         val quoteOfDayBtn = view.findViewById<Button>(R.id.quoteButton)
+
+        model = activity.run {
+            ViewModelProviders.of(activity!!).get(MyModelView::class.java)
+        }
 
         progressLevel.progress = 50
 

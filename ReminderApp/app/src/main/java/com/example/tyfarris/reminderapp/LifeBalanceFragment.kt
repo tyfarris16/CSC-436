@@ -1,5 +1,6 @@
 package com.example.tyfarris.reminderapp
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -23,9 +24,16 @@ class LifeBalanceFragment : Fragment() {
 
     val labels = listOf("Health", "Work", "Social")
 
+    private lateinit var model: MyModelView
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.fragment_life_balance, container, false)
         var chart = view.findViewById<PieChart>(R.id.pie_chart)
+
+        model = activity.run {
+            ViewModelProviders.of(activity!!).get(MyModelView::class.java)
+        }
+
         setUpPieChart(chart)
         return view
     }

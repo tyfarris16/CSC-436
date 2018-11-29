@@ -1,5 +1,8 @@
 package com.example.tyfarris.reminderapp
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -7,13 +10,23 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
+import android.speech.tts.TextToSpeech
+import android.support.v4.view.accessibility.AccessibilityEventCompat.setAction
+import android.content.Intent
+
+
 
 class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener {
+
+    lateinit var model : MyModelView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        //load view model
+        model = ViewModelProviders.of(this).get(MyModelView::class.java)
 
         val toggle = ActionBarDrawerToggle(
                 this, drawer_layout, toolbar,
@@ -43,16 +56,16 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_profile -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ProfileFragment()).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ProfileFragment()).addToBackStack("profile").commit()
             }
             R.id.nav_reminders -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, RemindersFragment()).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, RemindersFragment()).addToBackStack("reminders").commit()
             }
             R.id.nav_life_balance -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, LifeBalanceFragment()).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, LifeBalanceFragment()).addToBackStack("lifeBalance").commit()
             }
             R.id.nav_calendar -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CalendarFragment()).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CalendarFragment()).addToBackStack("calendar").commit()
             }
         }
 
