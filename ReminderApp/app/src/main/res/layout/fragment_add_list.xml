@@ -13,7 +13,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="213dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
         app:layout_constraintStart_toEndOf="@+id/textViewListName"
         app:layout_constraintTop_toTopOf="parent" />
 

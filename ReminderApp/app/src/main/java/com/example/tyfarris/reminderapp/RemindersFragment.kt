@@ -23,19 +23,23 @@ class RemindersFragment : Fragment() {
 
 //    var myDataset = arrayOf("School List", "Thanksgiving List", "Random List", "Idea List")
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        //retrieve view model
+        model = activity.run {
+            ViewModelProviders.of(activity!!).get(MyModelView::class.java)
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_reminders, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         val addButton = view.findViewById<FloatingActionButton>(R.id.buttonAddList)
 
-        //view model
-        model = activity.run {
-            ViewModelProviders.of(activity!!).get(MyModelView::class.java)
-        }
-
         //recycler view
         viewManager = LinearLayoutManager(activity)
-        viewAdapter = MyAdapter(model.lstDirectory)
+        viewAdapter = MyAdapter(this, model, model.lstDirectory)
 
         //notify that list directory has been updated
         recycler_view?.adapter?.notifyDataSetChanged()

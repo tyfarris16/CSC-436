@@ -26,13 +26,16 @@ class LifeBalanceFragment : Fragment() {
 
     private lateinit var model: MyModelView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view = inflater.inflate(R.layout.fragment_life_balance, container, false)
-        var chart = view.findViewById<PieChart>(R.id.pie_chart)
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         model = activity.run {
             ViewModelProviders.of(activity!!).get(MyModelView::class.java)
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        var view = inflater.inflate(R.layout.fragment_life_balance, container, false)
+        var chart = view.findViewById<PieChart>(R.id.pie_chart)
 
         setUpPieChart(chart)
         return view

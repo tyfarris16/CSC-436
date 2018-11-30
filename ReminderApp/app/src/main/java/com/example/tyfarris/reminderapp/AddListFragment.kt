@@ -15,15 +15,18 @@ import kotlinx.android.synthetic.main.fragment_add_list.*
 class AddListFragment : Fragment() {
     private lateinit var model: MyModelView
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        model = activity.run {
+            ViewModelProviders.of(activity!!).get(MyModelView::class.java)
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_add_list, container, false)
         val saveLstBtn = view.findViewById<Button>(R.id.buttonSaveList)
         val cancelBtn = view.findViewById<Button>(R.id.buttonCancelList)
         val editLst = view.findViewById<EditText>(R.id.editTextListName)
-
-        model = activity.run {
-            ViewModelProviders.of(activity!!).get(MyModelView::class.java)
-        }
 
         saveLstBtn?.setOnClickListener{
             //add list to lstDirectory in view model

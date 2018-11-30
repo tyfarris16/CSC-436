@@ -1,13 +1,14 @@
 package com.example.tyfarris.reminderapp
 
 import android.arch.lifecycle.ViewModel
+import java.io.Serializable
 
 class MyModelView : ViewModel() {
 
     var lstDirectory : MutableList<ReminderList> = mutableListOf()
 
     data class ReminderList(val listName: String,
-                            val reminderList: MutableList<Reminder>)
+                            val reminderList: MutableList<Reminder>) : Serializable
 
     data class Reminder(val event: String,
                         val date: String,
