@@ -21,7 +21,10 @@ class MyAdapter(val fragment: Fragment, val model: MyModelView, val myDataset: M
 
             view.setOnClickListener {
 
-                //to pass the data of the selected list
+                //to pass the position of selected list by model view
+                model.selectedListPosition =  adapterPosition
+
+                //to pass the data of the selected list by a bundle
                 val bundleReminderList = Bundle()
                 bundleReminderList.putSerializable("SelectedReminderList", model.lstDirectory[adapterPosition])
                 bundleReminderList.putSerializable("SelectedReminderListPosition", adapterPosition)

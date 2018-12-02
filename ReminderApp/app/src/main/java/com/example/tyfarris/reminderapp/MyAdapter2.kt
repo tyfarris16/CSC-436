@@ -17,16 +17,10 @@ class MyAdapter2(val fragment: Fragment, val model: MyModelView, val currentPos:
     inner class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         init {
 
-//            view.setOnClickListener {
-//
-//                //to pass the data of the selected list
-//                val bundleReminderList = Bundle()
-//                bundleReminderList.putSerializable("SelectedReminderList", model.lstDirectory[adapterPosition])
-//                val newEditFragment = EditListFragment()
-//                newEditFragment.arguments = bundleReminderList
-//
-//                fragment.activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_container, newEditFragment)?.addToBackStack("editList")?.commit()
-//            }
+            view.setOnClickListener {
+                model.selectedReminderPos = adapterPosition
+                fragment.activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_container, EditReminderFragment())?.addToBackStack("editReminder")?.commit()
+            }
 
             view.setOnLongClickListener{
                 //TODO:"Set Visiblity for buttons here"
