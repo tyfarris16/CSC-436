@@ -1,5 +1,7 @@
 package com.example.tyfarris.reminderapp
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import java.util.*
 
 class EditReminderFragment : Fragment() {
     private lateinit var model: MyModelView
@@ -26,6 +29,7 @@ class EditReminderFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.details, container, false)
+
         //buttons
         val saveBtn = view.findViewById<Button>(R.id.buttonSaveReminder)
         val cancelBtn = view.findViewById<Button>(R.id.buttonCancelReminder)
@@ -39,15 +43,11 @@ class EditReminderFragment : Fragment() {
 
         //updated values
         var updatedEvent = ""
-        var updatedTime = ""
-        var updatedDate = ""
         var updatedPlace = ""
         var updatedDescription = ""
 
         //booleans to keep track of which is updated
         var hasEventChanged = false
-        var hasTimeChanged = false
-        var hasDateChanged = false
         var hasPlaceChanged = false
         var hasDescriptionChanged = false
 
@@ -64,40 +64,6 @@ class EditReminderFragment : Fragment() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 updatedEvent = p0.toString()
                 hasEventChanged = true
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-        })
-
-        //when time is edited
-        time.addTextChangedListener(object: TextWatcher {
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                updatedTime = p0.toString()
-                hasTimeChanged = true
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-        })
-
-        //when date is edited
-        date.addTextChangedListener(object: TextWatcher {
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                updatedDate = p0.toString()
-                hasDateChanged = true
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -149,14 +115,6 @@ class EditReminderFragment : Fragment() {
                 model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].event = updatedEvent
             }
 
-            if (hasTimeChanged) {
-                model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].time = updatedTime
-            }
-
-            if (hasDateChanged) {
-                model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].date = updatedDate
-            }
-
             if (hasPlaceChanged) {
                 model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].place = updatedPlace
             }
@@ -174,6 +132,72 @@ class EditReminderFragment : Fragment() {
             fm?.popBackStack ("editReminder", FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
 
+        //when date is edited using time picker
+        date.setOnClickListener{
+            val c = Calendar.getInstance()
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+
+            val mDatePicker: DatePickerDialog
+            mDatePicker = DatePickerDialog(activity, DatePickerDialog.OnDateSetListener {
+                datePicker, selectedYear, selectedMonth, selectedDay ->
+
+                model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].date = (1 + month).toString() + "/" + day.toString() + "/" + year.toString()
+                date.setText((1 + selectedMonth).toString() + "/" + selectedDay.toString() + "/" + selectedYear.toString())},
+                    year, month, day)
+
+            mDatePicker.show()
+        }
+
+
+        //when time is edited using time picker
+        time.setOnClickListener{
+            //            val newFragment = TimePickerFragment()
+//            newFragment.show(fragmentManager, "timePicker")
+
+            val currentTime = Calendar.getInstance()
+            val hour = currentTime.get(Calendar.HOUR_OF_DAY)
+            val minute = currentTime.get(Calendar.MINUTE)
+            var hourAmPm : Int
+            var amPm : String
+
+            val mTimePicker: TimePickerDialog
+            mTimePicker = TimePickerDialog(activity, TimePickerDialog.OnTimeSetListener {
+                timePicker, selectedHour, selectedMinute ->
+
+                if (selectedHour >= 12){
+                    amPm = "PM"
+
+                    if (selectedHour == 12) {
+                        hourAmPm = selectedHour
+                    }
+                    else {
+                        hourAmPm = selectedHour % 12
+                    }
+                }
+                else {
+                    amPm = "AM"
+                    if (selectedHour == 0) {
+                        hourAmPm = 12
+                    }
+                    else {
+                        hourAmPm = selectedHour
+                    }
+                }
+
+                model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].time = hourAmPm.toString() + ":" + selectedMinute + " " + amPm
+
+                if (selectedMinute < 10)
+                    time.setText(hourAmPm.toString() + ":0" + selectedMinute + " " + amPm)
+                else
+                    time.setText(hourAmPm.toString() + ":" + selectedMinute + " " + amPm)
+
+            }, hour, minute, false)
+
+            mTimePicker.show()
+
+        }
         return view
     }
 }
