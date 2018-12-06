@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class ProfileFragment : Fragment(){
@@ -27,6 +28,9 @@ class ProfileFragment : Fragment(){
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         val progressLevel = view.findViewById<ProgressBar>(R.id.progressBar)
         val quoteOfDayBtn = view.findViewById<Button>(R.id.quoteButton)
+
+        //set the info button to invisible
+        activity?.toolbar_info_logo?.visibility = View.INVISIBLE
 
         progressLevel.progress = 50
 

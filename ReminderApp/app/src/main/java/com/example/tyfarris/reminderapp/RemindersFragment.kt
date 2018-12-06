@@ -38,7 +38,7 @@ class RemindersFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         val addButton = view.findViewById<FloatingActionButton>(R.id.buttonAddList)
 
-        //set the info button to visible
+        //set the info button to invisible
         activity?.toolbar_info_logo?.visibility = View.INVISIBLE
 
         //recycler view
