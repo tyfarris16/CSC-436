@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_reminders.*
 
 class RemindersFragment : Fragment() {
@@ -36,6 +37,9 @@ class RemindersFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_reminders, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         val addButton = view.findViewById<FloatingActionButton>(R.id.buttonAddList)
+
+        //set the info button to visible
+        activity?.toolbar_info_logo?.visibility = View.INVISIBLE
 
         //recycler view
         viewManager = LinearLayoutManager(activity)

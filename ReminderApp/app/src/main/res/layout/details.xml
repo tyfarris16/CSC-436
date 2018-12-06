@@ -113,8 +113,18 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/editDescription"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="30dp"
             android:text="Description" />
+
+        <TextView
+            android:id="@+id/textViewCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewDescription"
+            android:layout_alignStart="@+id/textViewEvent"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="115dp"
+            android:text="Category" />
 
         <Button
             android:id="@+id/buttonSaveReminder"
@@ -137,6 +147,37 @@
             android:layout_marginEnd="-2dp"
             android:layout_marginBottom="5dp"
             android:text="Cancel" />
+
+        <RadioGroup
+            android:id="@+id/buttonGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editDescription"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="96dp"
+            android:layout_marginEnd="29dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/socialBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="Social" />
+
+            <RadioButton
+                android:id="@+id/workBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="Work" />
+
+            <RadioButton
+                android:id="@+id/healthBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Health" />
+        </RadioGroup>
 
 
     </RelativeLayout>

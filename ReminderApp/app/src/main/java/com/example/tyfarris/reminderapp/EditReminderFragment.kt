@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RadioGroup
 import android.widget.Toast
 import java.util.*
 
@@ -21,7 +22,6 @@ class EditReminderFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         model = activity.run {
             ViewModelProviders.of(activity!!).get(MyModelView::class.java)
         }
@@ -41,6 +41,10 @@ class EditReminderFragment : Fragment() {
         val place= view.findViewById<EditText>(R.id.editPlace)
         val description = view.findViewById<EditText>(R.id.editDescription)
 
+        //radio button
+        val radioGroup = view.findViewById(R.id.buttonGroup) as RadioGroup
+        var selectedCategory : Float = model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].category
+
         //updated values
         var updatedEvent = ""
         var updatedPlace = ""
@@ -57,6 +61,14 @@ class EditReminderFragment : Fragment() {
         date.setText(model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].date)
         place.setText(model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].place)
         description.setText(model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].description)
+
+        //show the radio button is selected
+        when (selectedCategory) {
+
+            1.0f -> radioGroup.check(R.id.socialBtn)
+            2.0f -> radioGroup.check(R.id.workBtn)
+            3.0f -> radioGroup.check(R.id.healthBtn)
+        }
 
         //when event is edited
         event.addTextChangedListener(object: TextWatcher {
@@ -122,6 +134,8 @@ class EditReminderFragment : Fragment() {
             if (hasDescriptionChanged) {
                 model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].description = updatedDescription
             }
+
+            model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].category = selectedCategory
 
             val fm = activity?.supportFragmentManager
             fm?.popBackStack ("editReminder", FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -196,8 +210,26 @@ class EditReminderFragment : Fragment() {
             }, hour, minute, false)
 
             mTimePicker.show()
-
         }
+
+        //when the category button is selected
+        radioGroup.setOnCheckedChangeListener{
+            group, checkedId ->
+            when (checkedId) {
+                R.id.socialBtn -> {
+                    selectedCategory = 1.0f
+                }
+
+                R.id.workBtn -> {
+                    selectedCategory = 2.0f
+                }
+
+                R.id.healthBtn -> {
+                    selectedCategory = 3.0f
+                }
+            }
+        }
+
         return view
     }
 }

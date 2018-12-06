@@ -13,7 +13,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import android.speech.tts.TextToSpeech
 import android.support.v4.view.accessibility.AccessibilityEventCompat.setAction
 import android.content.Intent
-
+import android.util.Log
+import android.view.View
+import android.widget.ImageView
+import android.widget.Toast
+import android.widget.Toolbar
 
 
 class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener {
@@ -24,6 +28,13 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        //To make the info logo clickable
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        toolbar_info_logo.setOnClickListener{
+            this.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_container, EditListNameFragment())?.addToBackStack("editListName")?.commit()
+        }
 
         //load view model
         model = ViewModelProviders.of(this).get(MyModelView::class.java)

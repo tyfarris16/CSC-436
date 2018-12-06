@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
-        android:src="@android:drawable/ic_menu_add"
+        android:src="@drawable/ic_add_button_24dp"
         app:borderWidth="0dp"
         app:layout_anchorGravity="bottom|center" />
 

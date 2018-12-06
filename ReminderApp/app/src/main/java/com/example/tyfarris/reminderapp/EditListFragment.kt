@@ -9,8 +9,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_reminders.*
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 class EditListFragment : Fragment() {
 
@@ -38,6 +39,9 @@ class EditListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_reminders, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         val addButton = view.findViewById<FloatingActionButton>(R.id.buttonAddList)
+
+        //set the info button to visible
+        activity?.toolbar_info_logo?.visibility = View.VISIBLE
 
         //recycler view
         viewManager = LinearLayoutManager(activity)

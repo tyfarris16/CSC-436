@@ -10,11 +10,9 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import kotlinx.android.synthetic.main.details.*
-import android.widget.TimePicker
 import android.app.TimePickerDialog
+import android.widget.*
 import java.text.DateFormat
 import java.util.*
 
@@ -35,17 +33,19 @@ class AddReminderFragment : Fragment() {
         val view = inflater.inflate(R.layout.details, container, false)
         val saveBtn = view.findViewById<Button>(R.id.buttonSaveReminder)
         val cancelBtn = view.findViewById<Button>(R.id.buttonCancelReminder)
+        val radioGroup = view.findViewById(R.id.buttonGroup) as RadioGroup
 
         val event = view.findViewById<EditText>(R.id.editEvent)
         val time = view.findViewById<EditText>(R.id.editTime)
         val date= view.findViewById<EditText>(R.id.editDate)
         val place= view.findViewById<EditText>(R.id.editPlace)
         val description = view.findViewById<EditText>(R.id.editDescription)
+        var selectedCategory : Float = -1.0f
 
         saveBtn?.setOnClickListener{
             //add reminder to list
             model.lstDirectory[model.selectedListPosition].reminderList.add(MyModelView.Reminder(event.text.toString(),
-                    date.text.toString(), time.text.toString(), place.text.toString(), description.text.toString()))
+                    date.text.toString(), time.text.toString(), place.text.toString(), description.text.toString(), selectedCategory))
 
             val fm = activity?.supportFragmentManager
             fm?.popBackStack ("addReminder", FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -116,6 +116,24 @@ class AddReminderFragment : Fragment() {
             }, hour, minute, false)
 
             mTimePicker.show()
+        }
+
+        //when the category button is selected
+        radioGroup.setOnCheckedChangeListener{
+            group, checkedId ->
+                when (checkedId) {
+                    R.id.socialBtn -> {
+                        selectedCategory = 1.0f
+                    }
+
+                    R.id.workBtn -> {
+                        selectedCategory = 2.0f
+                    }
+
+                    R.id.healthBtn -> {
+                        selectedCategory = 3.0f
+                    }
+                }
         }
         return view
     }

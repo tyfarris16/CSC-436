@@ -1,6 +1,7 @@
 package com.example.tyfarris.reminderapp
 
 import android.arch.lifecycle.ViewModel
+import android.widget.ImageView
 import java.io.Serializable
 
 class MyModelView : ViewModel() {
@@ -16,7 +17,8 @@ class MyModelView : ViewModel() {
                         var date: String,
                         var time: String,
                         var place: String,
-                        var description: String)
+                        var description: String,
+                        var category : Float)
 
     fun addReminderList(reminderLstName: String){
         val lst = ReminderList(reminderLstName, mutableListOf())
