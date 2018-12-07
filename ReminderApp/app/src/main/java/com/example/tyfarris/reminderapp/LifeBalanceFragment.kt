@@ -112,5 +112,3 @@ class LifeBalanceFragment : Fragment() {
         chart.description.isEnabled = false
     }
 }
-
-//TODO: CHECK OUT WHEN NULL :O

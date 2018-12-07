@@ -179,6 +179,16 @@
                 android:text="Health" />
         </RadioGroup>
 
+        <Button
+            android:id="@+id/buttonDoneReminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="6dp"
+            android:visibility="invisible"
+            android:text="Done" />
+
 
     </RelativeLayout>
 

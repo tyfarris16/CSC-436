@@ -10,6 +10,8 @@ class MyModelView : ViewModel() {
     var lstDirectory : MutableList<ReminderList> = mutableListOf()
     var selectedListPosition : Int = -1
     var selectedReminderPos : Int = -1
+    var progress: Int = 0
+    var level : Int = 0
 
     data class ReminderList(var listName: String,
                             val reminderList: MutableList<Reminder>) : Serializable
@@ -19,7 +21,8 @@ class MyModelView : ViewModel() {
                         var place: String,
                         var description: String,
                         var category : Float,
-                        var am_pm : String)
+                        var am_pm : String,
+                        var isDone : Boolean)
 
     fun addReminderList(reminderLstName: String){
         val lst = ReminderList(reminderLstName, mutableListOf())

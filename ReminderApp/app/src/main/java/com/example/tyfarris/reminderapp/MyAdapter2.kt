@@ -6,16 +6,22 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import kotlinx.android.synthetic.main.recycler_item.view.*
 
 class MyAdapter2(val fragment: Fragment, val model: MyModelView, val currentPos: Int, val myDataset: MyModelView.ReminderList) :
         RecyclerView.Adapter<MyAdapter2.MyViewHolder>() {
+
+    lateinit var checkMark : ImageView
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just a string in this case that is shown in a TextView.
     inner class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         init {
+
+            checkMark = view.findViewById(R.id.check_mark)
 
             view.setOnClickListener {
                 model.selectedReminderPos = adapterPosition
@@ -49,6 +55,11 @@ class MyAdapter2(val fragment: Fragment, val model: MyModelView, val currentPos:
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.view.text_view_reminders.text = myDataset.reminderList[position].event
+
+        if (myDataset.reminderList[position].isDone){
+            checkMark.visibility = View.VISIBLE
+        }
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.text.Editable
@@ -11,15 +12,13 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RadioGroup
-import android.widget.Toast
+import android.widget.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 class EditReminderFragment : Fragment() {
     private lateinit var model: MyModelView
+    var tts:TextToSpeech? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +33,11 @@ class EditReminderFragment : Fragment() {
         //buttons
         val saveBtn = view.findViewById<Button>(R.id.buttonSaveReminder)
         val cancelBtn = view.findViewById<Button>(R.id.buttonCancelReminder)
+        val doneBtn = view.findViewById<Button>(R.id.buttonDoneReminder)
+
+        //if the task is not done display the view button
+        if (!model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].isDone)
+            doneBtn.visibility = View.VISIBLE
 
         //edit texts
         val event = view.findViewById<EditText>(R.id.editEvent)
@@ -213,6 +217,22 @@ class EditReminderFragment : Fragment() {
                     selectedCategory = 3.0f
                 }
             }
+        }
+
+        //to say great job when done button is pressed
+        tts = TextToSpeech(activity?.applicationContext, TextToSpeech.OnInitListener { status ->
+            if (status != TextToSpeech.ERROR) {
+                tts!!.setLanguage(Locale.UK)
+            }
+        })
+
+
+        //when the task is done add a point
+        doneBtn.setOnClickListener{
+            model.progress = model.progress + 20
+            tts!!.speak("Great Job!", TextToSpeech.QUEUE_FLUSH, null, null)
+            model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].isDone = true
+            doneBtn.visibility = View.INVISIBLE
         }
 
         return view

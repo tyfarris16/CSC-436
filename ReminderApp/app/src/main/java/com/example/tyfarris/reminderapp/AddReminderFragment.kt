@@ -46,13 +46,13 @@ class AddReminderFragment : Fragment() {
         var dateCalendar : Calendar = Calendar.getInstance()
         var dataFormat = SimpleDateFormat("MMM d, yyyy")
         var timeFormat = SimpleDateFormat("hh:mm")
-        var amPm : String = ""
+        var amPm : String = getAmPm(Calendar.HOUR)
 
         saveBtn?.setOnClickListener{
             //add reminder to list
 
             model.lstDirectory[model.selectedListPosition].reminderList.add(MyModelView.Reminder(event.text.toString(),
-                    dateCalendar.time, place.text.toString(),description.text.toString(), selectedCategory, amPm))
+                    dateCalendar.time, place.text.toString(),description.text.toString(), selectedCategory, amPm, false))
 
             val fm = activity?.supportFragmentManager
             fm?.popBackStack ("addReminder", FragmentManager.POP_BACK_STACK_INCLUSIVE)

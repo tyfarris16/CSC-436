@@ -17,9 +17,9 @@
         android:layout_height="214dp"
         android:layout_alignStart="@+id/textViewUsername"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="-63dp"
-        android:layout_marginTop="33dp"
-        app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+        android:layout_marginStart="-61dp"
+        android:layout_marginTop="30dp"
+        app:srcCompat="@drawable/ic_llama" />
 
     <TextView
         android:id="@+id/textViewLevel"
@@ -28,8 +28,8 @@
         android:layout_alignStart="@+id/textViewUsername"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="20dp"
-        android:layout_marginBottom="206dp"
-        android:text="Level : 2" />
+        android:layout_marginBottom="209dp"
+        android:text="Level :" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -49,5 +49,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="95dp"
         android:text="Quote of the day" />
+
+    <TextView
+        android:id="@+id/textViewLevelValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textViewLevel"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/textViewLevel"
+        android:text="0" />
 
 </RelativeLayout>

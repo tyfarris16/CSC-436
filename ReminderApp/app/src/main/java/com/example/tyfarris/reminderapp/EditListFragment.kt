@@ -67,7 +67,6 @@ class EditListFragment : Fragment() {
         addButton?.setOnClickListener{
             //Toast.makeText(context, "HELLO", Toast.LENGTH_SHORT).show()
             activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_container, AddReminderFragment())?.addToBackStack("addReminder")?.commit()
-        //TODO: Get this working
         }
 
         return view
