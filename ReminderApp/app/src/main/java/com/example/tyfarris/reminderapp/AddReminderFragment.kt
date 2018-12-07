@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.details.*
 import android.app.TimePickerDialog
 import android.widget.*
 import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -42,10 +43,16 @@ class AddReminderFragment : Fragment() {
         val description = view.findViewById<EditText>(R.id.editDescription)
         var selectedCategory : Float = -1.0f
 
+        var dateCalendar : Calendar = Calendar.getInstance()
+        var dataFormat = SimpleDateFormat("MMM d, yyyy")
+        var timeFormat = SimpleDateFormat("hh:mm")
+        var amPm : String = ""
+
         saveBtn?.setOnClickListener{
             //add reminder to list
+
             model.lstDirectory[model.selectedListPosition].reminderList.add(MyModelView.Reminder(event.text.toString(),
-                    date.text.toString(), time.text.toString(), place.text.toString(), description.text.toString(), selectedCategory))
+                    dateCalendar.time, place.text.toString(),description.text.toString(), selectedCategory, amPm))
 
             val fm = activity?.supportFragmentManager
             fm?.popBackStack ("addReminder", FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -66,7 +73,9 @@ class AddReminderFragment : Fragment() {
             val mDatePicker: DatePickerDialog
             mDatePicker = DatePickerDialog(activity, DatePickerDialog.OnDateSetListener {
                 datePicker, selectedYear, selectedMonth, selectedDay ->
-                date.setText((1 + selectedMonth).toString() + "/" + selectedDay.toString() + "/" + selectedYear.toString())},
+                dateCalendar.set(selectedYear, selectedMonth, selectedDay)
+                date.setText(dataFormat.format(dateCalendar.time))
+                 },
                     year, month, day)
 
             mDatePicker.show()
@@ -81,37 +90,15 @@ class AddReminderFragment : Fragment() {
             val currentTime = Calendar.getInstance()
             val hour = currentTime.get(Calendar.HOUR_OF_DAY)
             val minute = currentTime.get(Calendar.MINUTE)
-            var hourAmPm : Int
-            var amPm : String
 
             val mTimePicker: TimePickerDialog
             mTimePicker = TimePickerDialog(activity, TimePickerDialog.OnTimeSetListener {
                 timePicker, selectedHour, selectedMinute ->
 
-                if (selectedHour >= 12){
-                    amPm = "PM"
-
-                    if (selectedHour == 12) {
-                        hourAmPm = selectedHour
-                    }
-                    else {
-                        hourAmPm = selectedHour % 12
-                    }
-                }
-                else {
-                    amPm = "AM"
-                    if (selectedHour == 0) {
-                        hourAmPm = 12
-                    }
-                    else {
-                        hourAmPm = selectedHour
-                    }
-                }
-
-                if (selectedMinute < 10)
-                    time.setText(hourAmPm.toString() + ":0" + selectedMinute + " " + amPm)
-                else
-                time.setText(hourAmPm.toString() + ":" + selectedMinute + " " + amPm)
+                amPm = getAmPm(selectedHour)
+                dateCalendar.set(Calendar.HOUR, selectedHour)
+                dateCalendar.set(Calendar.MINUTE, selectedMinute)
+                time.setText(timeFormat.format(dateCalendar.time) + " " + amPm)
 
             }, hour, minute, false)
 
@@ -136,5 +123,14 @@ class AddReminderFragment : Fragment() {
                 }
         }
         return view
+    }
+
+    fun getAmPm(selectedHour: Int) : String {
+        if (selectedHour >= 12){
+            return "PM"
+        }
+        else {
+            return "AM"
+        }
     }
 }

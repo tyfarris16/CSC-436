@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.Toast
+import java.text.SimpleDateFormat
 import java.util.*
 
 class EditReminderFragment : Fragment() {
@@ -55,10 +56,15 @@ class EditReminderFragment : Fragment() {
         var hasPlaceChanged = false
         var hasDescriptionChanged = false
 
+        var dataFormat = SimpleDateFormat("MMM d, yyyy")
+        var timeFormat = SimpleDateFormat("hh:mm")
+        var dateCalendar : Calendar = Calendar.getInstance()
+        var amPm : String = model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].am_pm
+
         //references to edit texts on fragment
         event.setText(model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].event)
-        time.setText(model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].time)
-        date.setText(model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].date)
+        date.setText(dataFormat.format(model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].date))
+        time.setText(timeFormat.format(model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].date) + " " + amPm)
         place.setText(model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].place)
         description.setText(model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].description)
 
@@ -156,9 +162,10 @@ class EditReminderFragment : Fragment() {
             val mDatePicker: DatePickerDialog
             mDatePicker = DatePickerDialog(activity, DatePickerDialog.OnDateSetListener {
                 datePicker, selectedYear, selectedMonth, selectedDay ->
-
-                model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].date = (1 + month).toString() + "/" + day.toString() + "/" + year.toString()
-                date.setText((1 + selectedMonth).toString() + "/" + selectedDay.toString() + "/" + selectedYear.toString())},
+                dateCalendar.set(selectedYear, selectedMonth, selectedDay)
+                date.setText(dataFormat.format(dateCalendar.time))
+                model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].date = dateCalendar.time
+            },
                     year, month, day)
 
             mDatePicker.show()
@@ -173,39 +180,17 @@ class EditReminderFragment : Fragment() {
             val currentTime = Calendar.getInstance()
             val hour = currentTime.get(Calendar.HOUR_OF_DAY)
             val minute = currentTime.get(Calendar.MINUTE)
-            var hourAmPm : Int
-            var amPm : String
 
             val mTimePicker: TimePickerDialog
             mTimePicker = TimePickerDialog(activity, TimePickerDialog.OnTimeSetListener {
                 timePicker, selectedHour, selectedMinute ->
 
-                if (selectedHour >= 12){
-                    amPm = "PM"
-
-                    if (selectedHour == 12) {
-                        hourAmPm = selectedHour
-                    }
-                    else {
-                        hourAmPm = selectedHour % 12
-                    }
-                }
-                else {
-                    amPm = "AM"
-                    if (selectedHour == 0) {
-                        hourAmPm = 12
-                    }
-                    else {
-                        hourAmPm = selectedHour
-                    }
-                }
-
-                model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].time = hourAmPm.toString() + ":" + selectedMinute + " " + amPm
-
-                if (selectedMinute < 10)
-                    time.setText(hourAmPm.toString() + ":0" + selectedMinute + " " + amPm)
-                else
-                    time.setText(hourAmPm.toString() + ":" + selectedMinute + " " + amPm)
+                amPm = getAmPm(selectedHour)
+                dateCalendar.set(Calendar.HOUR, selectedHour)
+                dateCalendar.set(Calendar.MINUTE, selectedMinute)
+                model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].date = dateCalendar.time
+                model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].am_pm = amPm
+                time.setText(timeFormat.format(dateCalendar.time) + " " + amPm)
 
             }, hour, minute, false)
 
@@ -231,5 +216,14 @@ class EditReminderFragment : Fragment() {
         }
 
         return view
+    }
+
+    fun getAmPm(selectedHour: Int) : String {
+        if (selectedHour >= 12){
+            return "PM"
+        }
+        else {
+            return "AM"
+        }
     }
 }
