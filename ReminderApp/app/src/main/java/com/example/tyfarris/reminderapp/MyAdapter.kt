@@ -35,7 +35,6 @@ class MyAdapter(val fragment: Fragment, val model: MyModelView, val myDataset: M
             }
 
             view.setOnLongClickListener{
-                //TODO:"Set Visiblity for buttons here"
                 model.lstDirectory.removeAt(position)
                 notifyItemRemoved(adapterPosition)
                 notifyItemRangeChanged(adapterPosition, model.lstDirectory.size)

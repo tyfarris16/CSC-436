@@ -10,15 +10,18 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import android.widget.TextView
+import kotlinx.android.synthetic.main.nav_header_main.*
+import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener {
 
     lateinit var model : MyModelView
 
-    //For notifications
-    private val mNotificationTime = Calendar.getInstance().timeInMillis + 5000 //Set after 5 seconds from the current time.
-    private var mNotified = false
+//    //For notifications
+//    private val mNotificationTime = Calendar.getInstance().timeInMillis + 5000 //Set after 5 seconds from the current time.
+//    private var mNotified = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,11 +52,11 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
             nav_view.setCheckedItem(R.id.nav_reminders)
         }
 
-        //for notifications
-        //getIntent().getExtras().getString("notified").toBoolean()
-        if (!mNotified) {
-            NotificationUtils().setNotification(mNotificationTime, this@MainActivity)
-        }
+//        //for notifications
+//        //getIntent().getExtras().getString("notified").toBoolean()
+//        if (!mNotified) {
+//            NotificationUtils().setNotification(mNotificationTime, this@MainActivity)
+//        }
     }
 
     override fun onBackPressed() {

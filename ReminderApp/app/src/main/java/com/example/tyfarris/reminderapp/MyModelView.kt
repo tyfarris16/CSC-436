@@ -22,7 +22,8 @@ class MyModelView : ViewModel() {
                         var description: String,
                         var category : Float,
                         var am_pm : String,
-                        var isDone : Boolean)
+                        var isDone : Boolean,
+                        var notification : Int)
 
     fun addReminderList(reminderLstName: String){
         val lst = ReminderList(reminderLstName, mutableListOf())

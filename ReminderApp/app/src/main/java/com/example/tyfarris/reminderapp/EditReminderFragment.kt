@@ -60,10 +60,16 @@ class EditReminderFragment : Fragment() {
         var hasPlaceChanged = false
         var hasDescriptionChanged = false
 
+        //for the date and time in a reminder
         var dataFormat = SimpleDateFormat("MMM d, yyyy")
         var timeFormat = SimpleDateFormat("hh:mm")
         var dateCalendar : Calendar = Calendar.getInstance()
         var amPm : String = model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].am_pm
+
+        //spinner on the details xml
+        val spinnerValues = mutableListOf("Never", "Day of", "30 minutes before", "1 hour before", "1 day before")
+        val notifySpinner = view.findViewById<Spinner>(R.id.spinner)
+        var notifyValue : Int = model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].notification
 
         //references to edit texts on fragment
         event.setText(model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].event)
@@ -233,6 +239,18 @@ class EditReminderFragment : Fragment() {
             tts!!.speak("Great Job!", TextToSpeech.QUEUE_FLUSH, null, null)
             model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].isDone = true
             doneBtn.visibility = View.INVISIBLE
+        }
+
+        notifySpinner.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, spinnerValues)
+        notifySpinner.setSelection(notifyValue)
+        //to get the selected Item
+        notifySpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                model.lstDirectory[model.selectedListPosition].reminderList[model.selectedReminderPos].notification = position
+            }
         }
 
         return view

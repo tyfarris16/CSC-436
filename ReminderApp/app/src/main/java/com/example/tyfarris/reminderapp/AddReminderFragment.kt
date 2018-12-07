@@ -21,6 +21,10 @@ import java.util.*
 class AddReminderFragment : Fragment() {
 
     private lateinit var model: MyModelView
+    //For notifications
+    //private val mNotificationTime = Calendar.getInstance().timeInMillis + 5000 //Set after 5 seconds from the current time.
+    private var mNotificationTime = Calendar.getInstance().timeInMillis
+    private var mNotified = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,16 +47,36 @@ class AddReminderFragment : Fragment() {
         val description = view.findViewById<EditText>(R.id.editDescription)
         var selectedCategory : Float = -1.0f
 
+
+        //to store the date and time in reminder
         var dateCalendar : Calendar = Calendar.getInstance()
         var dataFormat = SimpleDateFormat("MMM d, yyyy")
         var timeFormat = SimpleDateFormat("hh:mm")
         var amPm : String = getAmPm(Calendar.HOUR)
 
+        //spinner on the details xml
+        val spinnerValues = mutableListOf("Never", "Day of", "30 minutes before", "1 hour before", "1 day before")
+        val notifySpinner = view.findViewById<Spinner>(R.id.spinner)
+        var notifyValue : Int = 0
+
+        var notifyBefore : Long
+
         saveBtn?.setOnClickListener{
             //add reminder to list
-
             model.lstDirectory[model.selectedListPosition].reminderList.add(MyModelView.Reminder(event.text.toString(),
-                    dateCalendar.time, place.text.toString(),description.text.toString(), selectedCategory, amPm, false))
+                    dateCalendar.time, place.text.toString(),
+                    description.text.toString(), selectedCategory,
+                    amPm, false, notifyValue))
+
+            //for notifications
+            //getIntent().getExtras().getString("notified").toBoolean()
+            // notifyBefore = getNotifyBy(notifyValue)
+
+            mNotificationTime = Calendar.getInstance().timeInMillis
+
+            if (!mNotified && notifyValue > 0) {
+                NotificationUtils().setNotification(mNotificationTime, activity!!, event.text.toString(), description.text.toString())
+            }
 
             val fm = activity?.supportFragmentManager
             fm?.popBackStack ("addReminder", FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -122,6 +146,18 @@ class AddReminderFragment : Fragment() {
                     }
                 }
         }
+
+        notifySpinner.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, spinnerValues)
+        //to get the selected Item
+        notifySpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                notifyValue= position
+            }
+        }
+
         return view
     }
 
@@ -132,5 +168,18 @@ class AddReminderFragment : Fragment() {
         else {
             return "AM"
         }
+    }
+
+    fun getNotifyBy(pos : Int) : Long {
+        val thirtyMinutes:Long  = 1800000
+        val oneHour:Long  = 3600000
+        val oneDay:Long  = 86400000
+
+        when (pos) {
+            2 -> return thirtyMinutes
+            3 -> return oneHour
+            4 -> return oneDay
+        }
+        return -1
     }
 }

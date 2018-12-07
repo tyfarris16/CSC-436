@@ -1,6 +1,7 @@
 package com.example.tyfarris.reminderapp
 
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.recycler_item.view.*
+import java.util.*
 
 class MyAdapter2(val fragment: Fragment, val model: MyModelView, val currentPos: Int, val myDataset: MyModelView.ReminderList) :
         RecyclerView.Adapter<MyAdapter2.MyViewHolder>() {
@@ -20,7 +22,6 @@ class MyAdapter2(val fragment: Fragment, val model: MyModelView, val currentPos:
     // Each data item is just a string in this case that is shown in a TextView.
     inner class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         init {
-
             checkMark = view.findViewById(R.id.check_mark)
 
             view.setOnClickListener {
@@ -29,7 +30,6 @@ class MyAdapter2(val fragment: Fragment, val model: MyModelView, val currentPos:
             }
 
             view.setOnLongClickListener{
-                //TODO:"Set Visiblity for buttons here"
                 model.lstDirectory[currentPos].reminderList.removeAt(adapterPosition)
                 notifyItemRemoved(adapterPosition)
                 notifyItemRangeChanged(adapterPosition, myDataset.reminderList.size)

@@ -3,6 +3,7 @@ package com.example.tyfarris.reminderapp
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.ClipDescription
 import android.content.Intent
 import java.util.*
 
@@ -12,7 +13,7 @@ import java.util.*
 
 class NotificationUtils {
 
-    fun setNotification(timeInMilliSeconds: Long, activity: Activity) {
+    fun setNotification(timeInMilliSeconds: Long, activity: Activity, event : String, description : String) {
 
         //------------  alarm settings start  -----------------//
 
@@ -24,6 +25,8 @@ class NotificationUtils {
 
             alarmIntent.putExtra("reason", "notification")
             alarmIntent.putExtra("timestamp", timeInMilliSeconds)
+            alarmIntent.putExtra("event", event)
+            alarmIntent.putExtra("description", description)
 
 
             val calendar = Calendar.getInstance()

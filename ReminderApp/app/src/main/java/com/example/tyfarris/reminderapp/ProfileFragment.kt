@@ -25,6 +25,15 @@ class ProfileFragment : Fragment(){
         model = activity.run {
             ViewModelProviders.of(activity!!).get(MyModelView::class.java)
         }
+
+        //change the title of the bar
+        activity?.title = "Profile"
+
+//        Use to install voices
+//        val installIntent = Intent()
+//        installIntent.action = TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
+//        startActivity(installIntent)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

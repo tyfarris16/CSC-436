@@ -41,6 +41,9 @@ class RemindersFragment : Fragment() {
         //set the info button to invisible
         activity?.toolbar_info_logo?.visibility = View.INVISIBLE
 
+        //change the title of the bar
+        activity?.title = "Reminder App"
+
         //recycler view
         viewManager = LinearLayoutManager(activity)
         viewAdapter = MyAdapter(this, model, model.lstDirectory)
