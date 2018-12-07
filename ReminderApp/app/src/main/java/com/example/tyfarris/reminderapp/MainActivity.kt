@@ -1,8 +1,7 @@
 package com.example.tyfarris.reminderapp
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -10,19 +9,16 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
-import android.speech.tts.TextToSpeech
-import android.support.v4.view.accessibility.AccessibilityEventCompat.setAction
-import android.content.Intent
-import android.util.Log
-import android.view.View
-import android.widget.ImageView
-import android.widget.Toast
-import android.widget.Toolbar
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener {
 
     lateinit var model : MyModelView
+
+    //For notifications
+    private val mNotificationTime = Calendar.getInstance().timeInMillis + 5000 //Set after 5 seconds from the current time.
+    private var mNotified = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +47,12 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container, RemindersFragment()).commit()
             nav_view.setCheckedItem(R.id.nav_reminders)
+        }
+
+        //for notifications
+        //getIntent().getExtras().getString("notified").toBoolean()
+        if (!mNotified) {
+            NotificationUtils().setNotification(mNotificationTime, this@MainActivity)
         }
     }
 
